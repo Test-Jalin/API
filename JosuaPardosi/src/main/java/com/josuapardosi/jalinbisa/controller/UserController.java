@@ -3,11 +3,9 @@ package com.josuapardosi.jalinbisa.controller;
 import com.josuapardosi.jalinbisa.model.User;
 import com.josuapardosi.jalinbisa.repository.UserRepository;
 import com.josuapardosi.jalinbisa.service.UserService;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 
@@ -21,6 +19,10 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/welcome")
+    public String welcome(){
+        return "WELCOME";
+    }
 
     @PostMapping("/new")
     public User addNewUser(@RequestBody User userInfo){
@@ -34,8 +36,13 @@ public class UserController {
     }
 
     @GetMapping("/getUser")
-    public Optional<User> getUser(Authentication user){
+    public User getUser(Authentication user){
         return userService.getUser(user.getName());
+    }
+
+    @PutMapping("/updateUser")
+    public User updateUser(@RequestBody User users,Authentication user){
+        return userService.update(users,user.getName());
     }
 
 }

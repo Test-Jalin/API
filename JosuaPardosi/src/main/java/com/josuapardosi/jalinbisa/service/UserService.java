@@ -27,23 +27,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByName(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-//        return new org.springframework.security.core.userdetails.User(
-//                user.getName(),
-//                user.getPassword(),
-//                Collections.emptyList()
-//        );
-//    }
-
-    public User findById(Long id)
-    {
-        return userRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Data tidak ada"));
-    }
 
     public User addUser(User userInfo) {
         if(userInfo.getId() !=null)
@@ -56,22 +39,26 @@ public class UserService {
 
 
     public String deleteUser(String user) {
-        Optional<User> users = userRepository.findByName((user));
-        userRepository.deleteEmp(user);
+        User users = userRepository.findByName(user);
+        userRepository.deleteUser(user);
         return "User deleted";
     }
 
 
 
-    public Optional<User> getUser(String name) {
+    public User getUser(String name) {
         return userRepository.findByName(name);
     }
 
-    public boolean isCurrentUser( String name) {
-        Optional<User> currentUser = getUser(name);
-        return true;
+
+
+    public User update(User  user, String getUser)
+    {
+        User users = userRepository.findByName(getUser);
+        users.setName(user.getName());
+        User updatedUser = userRepository.save(users);
+        return updatedUser;
+
     }
-
-
 
 }
